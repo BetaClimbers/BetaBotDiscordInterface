@@ -1,0 +1,1 @@
+- Choose proper TypeScript target and module
