@@ -9,7 +9,7 @@ enum GradeSystems {
 @Discord()
 export abstract class Grade {
   @Slash("grade")
-  async credits(
+  async grade(
     @SlashOption("grade", {
       description: "The grade to convert",
       required: true,
