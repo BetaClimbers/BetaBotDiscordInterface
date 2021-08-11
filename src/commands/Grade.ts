@@ -1,10 +1,20 @@
 import { CommandInteraction } from "discord.js";
 import { Discord, Slash, SlashChoice, SlashOption } from "discordx";
+import ClimbingGrade, { gradeSystemsList } from "../climbing-grade";
 
-enum GradeSystems {
-  "French" = "French",
-  "YDS" = "YDS",
-}
+const GradeSystems: {
+  [key: string]: gradeSystemsList;
+} = {
+  French: "french",
+  "Yosemite Decimal System": "yds",
+  American: "yds",
+  Australian: "australian",
+  "South African": "south_african",
+  UIAA: "uiaa",
+  Hueco: "hueco",
+  British: "british",
+  Kurtyka: "kurtyki",
+};
 
 @Discord()
 export abstract class Grade {
@@ -18,22 +28,45 @@ export abstract class Grade {
     @SlashChoice(GradeSystems)
     @SlashOption("from", {
       description: "The grade system to convert from",
-      required: false,
+      required: true, // TODO: Change to false when detection works
     })
-    from: string,
+    from: gradeSystemsList | undefined,
     @SlashChoice(GradeSystems)
     @SlashOption("to", {
       description: "The grade system to convert to",
-      required: false,
+      required: true, // TODO: Change to false when unspecified targets work
     })
-    to: string,
+    to: gradeSystemsList | undefined,
     interaction: CommandInteraction
   ): Promise<void> {
     console.log(
       `Someone used the grade command: grade=${grade} from=${from} to=${to}`
     );
-    await interaction.reply("Coming soon!");
-    // TODO: Do system detection if not specified
-    // TODO: Do actual conversions
+
+    if (!from) {
+      await interaction.reply("Grade system detection coming soon!");
+      // TODO: Add grade system detection
+      return;
+    }
+
+    if (!to) {
+      await interaction.reply("Unspecified grade target coming soon!");
+      // TODO: Add multiple grade targets
+      return;
+    }
+
+    // TODO: Add grade validation (same regex's for detection can be used)
+    // TODO: Clean up grade when explicitly specified (example: add "5." to start of YDS)
+
+    try {
+      const climbingGrade = new ClimbingGrade(grade, from);
+      await interaction.reply(
+        `${grade} in ${from} is ${climbingGrade.format(to)} in ${to}`
+      );
+    } catch (e) {
+      await interaction.reply(
+        `Something went wrong while converting: ${(e as Error).message}`
+      );
+    }
   }
 }
