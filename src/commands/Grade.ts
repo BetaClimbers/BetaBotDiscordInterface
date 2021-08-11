@@ -7,7 +7,6 @@ const GradeSystems: {
 } = {
   French: "french",
   "Yosemite Decimal System": "yds",
-  American: "yds",
   Australian: "australian",
   "South African": "south_african",
   UIAA: "uiaa",
@@ -15,6 +14,24 @@ const GradeSystems: {
   British: "british",
   Kurtyka: "kurtyki",
 };
+
+const Regexes: {
+  system: gradeSystemsList;
+  regex: RegExp;
+}[] = [
+  {
+    system: "french",
+    regex: /^[1-9][abc][+]?$/,
+  },
+  {
+    system: "yds",
+    regex: /^5\.[0-9]$/,
+  },
+  {
+    system: "yds",
+    regex: /^5\.1[0-5][a-d]$/,
+  },
+];
 
 @Discord()
 export abstract class Grade {
@@ -28,13 +45,13 @@ export abstract class Grade {
     @SlashChoice(GradeSystems)
     @SlashOption("from", {
       description: "The grade system to convert from",
-      required: true, // TODO: Change to false when detection works
+      required: false,
     })
     from: gradeSystemsList | undefined,
     @SlashChoice(GradeSystems)
     @SlashOption("to", {
       description: "The grade system to convert to",
-      required: true, // TODO: Change to false when unspecified targets work
+      required: false,
     })
     to: gradeSystemsList | undefined,
     interaction: CommandInteraction
@@ -44,9 +61,22 @@ export abstract class Grade {
     );
 
     if (!from) {
-      await interaction.reply("Grade system detection coming soon!");
-      // TODO: Add grade system detection
-      return;
+      const detectedSystem = Grade.detectGradeSystem(grade);
+      if (detectedSystem) from = detectedSystem;
+      else {
+        await interaction.reply(
+          "Couldn't automatically detect the source grade, please specify it manually."
+        );
+        return;
+      }
+    } else {
+      // TODO: Clean up grade when explicitly specified (example: add "5." to start of YDS)
+
+      // This check is only necessary for manual source grades systems
+      if (!Grade.verifyGrade(grade, from)) {
+        await interaction.reply(`Specified grade (${grade}) didn't match specified system (${from})`);
+        return;
+      }
     }
 
     if (!to) {
@@ -54,9 +84,6 @@ export abstract class Grade {
       // TODO: Add multiple grade targets
       return;
     }
-
-    // TODO: Add grade validation (same regex's for detection can be used)
-    // TODO: Clean up grade when explicitly specified (example: add "5." to start of YDS)
 
     try {
       const climbingGrade = new ClimbingGrade(grade, from);
@@ -68,5 +95,22 @@ export abstract class Grade {
         `Something went wrong while converting: ${(e as Error).message}`
       );
     }
+  }
+
+  // Maybe regex system should be moved to climbing-grade.ts
+
+  private static detectGradeSystem(grade: string): gradeSystemsList | null {
+    for (const { system, regex } of Regexes)
+      if (regex.test(grade)) return system;
+    return null;
+  }
+
+  private static verifyGrade(grade: string, system: gradeSystemsList): boolean {
+    const regexes = Regexes.filter(
+      ({ system: regexSystem }) => regexSystem === system
+    );
+    if(regexes.length === 0) return true;
+    for (const { regex } of regexes) if (regex.test(grade)) return true;
+    return false;
   }
 }
