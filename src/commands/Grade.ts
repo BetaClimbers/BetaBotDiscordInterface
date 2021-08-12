@@ -95,9 +95,9 @@ export abstract class Grade {
         await interaction.reply(
           [
             `${grade} in ${from} is:`,
-            ...(Object.keys(gradeSystems) as gradeSystemsList[]).map(
-              (system) => `${climbingGrade.format(system)} in ${system}`
-            ),
+            ...(Object.keys(gradeSystems) as gradeSystemsList[])
+              .filter((system) => system != from)
+              .map((system) => `${climbingGrade.format(system)} in ${system}`),
           ].join("\n")
         );
       }
