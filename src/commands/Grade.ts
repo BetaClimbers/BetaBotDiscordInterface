@@ -1,6 +1,9 @@
 import { CommandInteraction } from "discord.js";
 import { Discord, Slash, SlashChoice, SlashOption } from "discordx";
-import ClimbingGrade, { gradeSystemsList } from "../climbing-grade";
+import ClimbingGrade, {
+  gradeSystems,
+  gradeSystemsList,
+} from "../climbing-grade";
 
 const GradeSystems: {
   [key: string]: gradeSystemsList;
@@ -74,22 +77,30 @@ export abstract class Grade {
 
       // This check is only necessary for manual source grades systems
       if (!Grade.verifyGrade(grade, from)) {
-        await interaction.reply(`Specified grade (${grade}) didn't match specified system (${from})`);
+        await interaction.reply(
+          `Specified grade (${grade}) didn't match specified system (${from})`
+        );
         return;
       }
     }
 
-    if (!to) {
-      await interaction.reply("Unspecified grade target coming soon!");
-      // TODO: Add multiple grade targets
-      return;
-    }
-
+    // TODO: Transform raw system ID to user-friendly string
     try {
       const climbingGrade = new ClimbingGrade(grade, from);
-      await interaction.reply(
-        `${grade} in ${from} is ${climbingGrade.format(to)} in ${to}`
-      );
+      if (to) {
+        await interaction.reply(
+          `${grade} in ${from} is ${climbingGrade.format(to)} in ${to}`
+        );
+      } else {
+        await interaction.reply(
+          [
+            `${grade} in ${from} is:`,
+            ...(Object.keys(gradeSystems) as gradeSystemsList[]).map(
+              (system) => `${climbingGrade.format(system)} in ${system}`
+            ),
+          ].join("\n")
+        );
+      }
     } catch (e) {
       await interaction.reply(
         `Something went wrong while converting: ${(e as Error).message}`
@@ -109,7 +120,7 @@ export abstract class Grade {
     const regexes = Regexes.filter(
       ({ system: regexSystem }) => regexSystem === system
     );
-    if(regexes.length === 0) return true;
+    if (regexes.length === 0) return true;
     for (const { regex } of regexes) if (regex.test(grade)) return true;
     return false;
   }

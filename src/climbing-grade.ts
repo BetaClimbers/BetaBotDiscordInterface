@@ -11,7 +11,7 @@ type GradeSystem = {
 const createGradeSystems = <M extends { [key: string]: GradeSystem }>(
   gradeSystems: M
 ) => gradeSystems;
-const gradeSystems = createGradeSystems({
+export const gradeSystems = createGradeSystems({
   yds: {
     grades: [
       "5.1",
@@ -196,7 +196,7 @@ const gradeSystems = createGradeSystems({
       "xii",
       "xii+",
     ],
-    format: String.prototype.toUpperCase,
+    format: (unFormatted) => unFormatted.toUpperCase(),
   },
   british: {
     grades: [
@@ -234,7 +234,7 @@ const gradeSystems = createGradeSystems({
       "e11 8b",
       "e11 8c",
     ],
-    format: (unFormatted: string) => {
+    format: (unFormatted) => {
       const gradeParts = unFormatted.split(" ");
       return gradeParts[0].toUpperCase() + " " + gradeParts[1];
     },
@@ -275,7 +275,7 @@ const gradeSystems = createGradeSystems({
       "v16",
       "v17",
     ],
-    format: String.prototype.toUpperCase,
+    format: (unFormatted) => unFormatted.toUpperCase(),
   },
   font: {
     grades: [
@@ -313,7 +313,7 @@ const gradeSystems = createGradeSystems({
       "8c+",
       "9a",
     ],
-    format: String.prototype.toUpperCase,
+    format: (unFormatted) => unFormatted.toUpperCase(),
   },
   // TODO: Kurtyka?
   kurtyki: {
@@ -353,7 +353,7 @@ const gradeSystems = createGradeSystems({
       "vi.8",
       "vi.8",
     ],
-    format: String.prototype.toUpperCase,
+    format: (unFormatted) => unFormatted.toUpperCase(),
   },
 });
 // TODO: Better name for `gradeSystemsList`
