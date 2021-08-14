@@ -23,17 +23,25 @@ const Regexes: {
   regex: RegExp;
 }[] = [
   {
-    system: "french",
+    system: "french",   // Base french system
     regex: /^[1-9][abc][+]?$/,
   },
   {
-    system: "yds",
+    system: "french", // French where we do not expect letters or plus
+    regex: /^[1-9]([abc][+])?$/,
+  },
+  {
+    system: "yds",  // Base YDS from 5.0 to 5.9
     regex: /^5\.[0-9]$/,
   },
   {
-    system: "yds",
+    system: "yds",  // YDS from 5.10-5.15 where we expect letters
     regex: /^5\.1[0-5][a-d]$/,
   },
+  {
+    system: "yds",  //YDS from 5.10-5.15 where we do not expect letters
+    regex: /^5\.1[0-5]$/,
+  }
 ];
 
 @Discord()

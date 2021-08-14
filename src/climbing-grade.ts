@@ -388,11 +388,10 @@ class ClimbingGrade {
 
   private getUniversalGrades(): number[] {
     const normalizedGrade = this.grade.toLowerCase();
-
     const grades = ClimbingGrade.getSystem(this.system).grades;
     const universalGrades = [];
     for (let i = 0; i < grades.length; i++) {
-      if (grades[i].split("/").indexOf(normalizedGrade) > -1) {
+      if (grades[i].includes(normalizedGrade.toString()) || grades[i].split("/").indexOf(normalizedGrade) > -1){
         universalGrades.push(i);
       } else if (universalGrades.length > 0) {
         break;
@@ -402,7 +401,6 @@ class ClimbingGrade {
     if (universalGrades.length === 0) {
       throw new Error("Climbing Grade Not Recognized");
     }
-
     return universalGrades;
   }
 
