@@ -121,8 +121,11 @@ export abstract class Grade {
   // Maybe regex system should be moved to climbing-grade.ts
 
   private static detectGradeSystem(grade: string): gradeSystemsList | null {
-    for (const { system, regex } of Regexes)
-      if (regex.test(grade)) return system;
+    for (const { system, regex } of Regexes) {
+      if (regex.test(grade)) {
+        return system;
+      }
+    }
     return null;
   }
 
