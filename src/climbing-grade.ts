@@ -6,6 +6,7 @@
 type GradeSystem = {
   grades: string[];
   format?(unFormatted: string): string;
+  regexes?: RegExp[];
 };
 
 const createGradeSystems = <M extends { [key: string]: GradeSystem }>(
@@ -48,6 +49,11 @@ export const gradeSystems = createGradeSystems({
       "5.15c",
       "5.15d",
     ],
+    regexes: [
+      /^5\.[0-9]$/, // Base YDS from 5.0 to 5.9
+      /^5\.1[0-5][a-d]$/, // YDS from 5.10-5.15 where we expect letters
+      /^5\.1[0-5]$/, //YDS from 5.10-5.15 where we do not expect letters
+    ],
   },
   french: {
     grades: [
@@ -84,6 +90,10 @@ export const gradeSystems = createGradeSystems({
       "9b",
       "9b+",
       "9c",
+    ],
+    regexes: [
+      /^[1-9][abc][+]?$/, // Base french system
+      /^[1-9]([abc][+])?$/, // French where we do not expect letters or plus
     ],
   },
   australian: {
@@ -371,6 +381,10 @@ class ClimbingGrade {
     private readonly system: keyof typeof gradeSystems,
     options?: Options
   ) {
+    if (!ClimbingGrade.verifyGrade(grade, system)) {
+      throw new Error("Grade doesn't match system");
+    }
+
     this._rangeDelimiter = options?.rangeDelimiter ?? " to ";
     this._pairDelimiter = options?.pairDelimiter ?? "/";
 
@@ -392,6 +406,7 @@ class ClimbingGrade {
 
     // TODO: Allow custom range implementations per grade system
     // Now there are edge cases like `6a` in French, that are recognised as range (due to the similar start with `6a+`),but shouldn't be a range
+    // Totally forgot about Roman numeral based systems, like UIAA (which is completely broken ATM)
     const universalGrades: number[] = grades.flatMap((grade, index) =>
       grade
         .split("/")
@@ -446,6 +461,32 @@ class ClimbingGrade {
 
   private static formatGrade(g: string, system: GradeSystem): string {
     return system.format?.(g) ?? g;
+  }
+
+  static detectGradeSystem(grade: string): gradeSystemsList | null {
+    for (const [system, value] of Object.entries<GradeSystem>(gradeSystems)) {
+      if (!value.regexes) continue;
+      for (const regex of value.regexes) {
+        if (regex.test(grade)) {
+          // Dirty hack, but it's necessary because of a type limitation of `Object.entries`
+          return system as gradeSystemsList;
+        }
+      }
+    }
+    return null;
+  }
+
+  static verifyGrade(grade: string, system: gradeSystemsList): boolean {
+    const regexes = (gradeSystems[system] as GradeSystem).regexes;
+    if (!regexes || regexes.length === 0) return true;
+
+    for (const regex of regexes) {
+      if (regex.test(grade)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 
