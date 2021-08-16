@@ -70,7 +70,7 @@ export abstract class Grade {
     grade = grade.trim();
 
     console.log(
-      `Someone used the grade command: grade=${grade} from=${from} to=${to}`
+      `${interaction.user.username}#${interaction.user.discriminator} used the grade command: grade=${grade} from=${from} to=${to}`
     );
 
     if (!from) {
