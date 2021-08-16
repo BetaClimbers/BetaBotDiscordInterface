@@ -391,7 +391,10 @@ class ClimbingGrade {
     const grades = ClimbingGrade.getSystem(this.system).grades;
     const universalGrades = [];
     for (let i = 0; i < grades.length; i++) {
-      if (grades[i].includes(normalizedGrade.toString()) || grades[i].split("/").indexOf(normalizedGrade) > -1){
+      if (
+        grades[i].includes(normalizedGrade) ||
+        grades[i].split("/").indexOf(normalizedGrade) > -1
+      ) {
         universalGrades.push(i);
       } else if (universalGrades.length > 0) {
         break;
