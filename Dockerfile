@@ -2,14 +2,15 @@ FROM node:16-alpine as build
 
 WORKDIR /app
 
-COPY package.json yarn.lock tsconfig.json ./
+COPY package.json yarn.lock ./
 
 RUN yarn install
 
+COPY tsconfig.json ./
 COPY src/ src/
 
-
 RUN yarn build
+
 
 FROM node:16-alpine as production
 
