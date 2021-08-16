@@ -67,6 +67,8 @@ export abstract class Grade {
     to: gradeSystemsList | undefined,
     interaction: CommandInteraction
   ): Promise<void> {
+    grade = grade.trim();
+
     console.log(
       `Someone used the grade command: grade=${grade} from=${from} to=${to}`
     );
