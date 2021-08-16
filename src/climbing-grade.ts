@@ -389,17 +389,19 @@ class ClimbingGrade {
   private getUniversalGrades(): number[] {
     const normalizedGrade = this.grade.toLowerCase();
     const grades = ClimbingGrade.getSystem(this.system).grades;
-    const universalGrades = [];
-    for (let i = 0; i < grades.length; i++) {
-      if (
-        grades[i].includes(normalizedGrade) ||
-        grades[i].split("/").indexOf(normalizedGrade) > -1
-      ) {
-        universalGrades.push(i);
-      } else if (universalGrades.length > 0) {
-        break;
-      }
-    }
+
+    // TODO: Allow custom range implementations per grade system
+    // Now there are edge cases like `6a` in French, that are recognised as range (due to the similar start with `6a+`),but shouldn't be a range
+    const universalGrades: number[] = grades.flatMap((grade, index) =>
+      grade
+        .split("/")
+        .reduce(
+          (acc, subGrade) => acc || subGrade.startsWith(normalizedGrade),
+          false
+        )
+        ? [index]
+        : []
+    );
 
     if (universalGrades.length === 0) {
       throw new Error("Climbing Grade Not Recognized");
