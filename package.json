@@ -7,10 +7,15 @@
   "author": "Jetse Verschuren",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-typescript": "^7.15.0",
     "@types/node": "^16.4.13",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
     "@typescript-eslint/parser": "^4.29.1",
+    "babel-jest": "^27.0.6",
     "eslint": "^7.32.0",
+    "jest": "^27.0.6",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.2",
     "ts-node-dev": "^1.1.8",
@@ -27,7 +32,8 @@
     "lint:eslint": "eslint --quiet src/",
     "autoformat": "npm-run-all autoformat:*",
     "autoformat:prettier": "prettier --write .",
-    "autoformat:eslint": "eslint --fix --quiet src/"
+    "autoformat:eslint": "eslint --fix --quiet src/",
+    "test":"jest"
   },
   "dependencies": {
     "discord.js": "^13.0.1",
