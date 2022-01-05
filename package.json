@@ -34,8 +34,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "discord.js": "^13.0.1",
-    "discordx": "^5.2.6",
+    "@discordx/importer": "^1.1.2",
+    "discord.js": "^13.5.0",
+    "discordx": "^9.1.7",
     "dotenv": "^10.0.0",
     "reflect-metadata": "^0.1.13"
   }

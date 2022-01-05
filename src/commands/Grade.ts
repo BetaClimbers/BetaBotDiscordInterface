@@ -24,7 +24,7 @@ export abstract class Grade {
   async grade(
     @SlashOption("grade", {
       description: "The grade to convert",
-      required: true,
+      // required: true,
     })
     grade: string,
     @SlashChoice(GradeSystems)
@@ -32,13 +32,15 @@ export abstract class Grade {
       description: "The grade system to convert from",
       required: false,
     })
-    from: gradeSystemsList | undefined,
+    from: gradeSystemsList,
+    // from: gradeSystemsList | undefined,
     @SlashChoice(GradeSystems)
     @SlashOption("to", {
       description: "The grade system to convert to",
       required: false,
     })
-    to: gradeSystemsList | undefined,
+    to: gradeSystemsList,
+    // to: gradeSystemsList | undefined,
     interaction: CommandInteraction
   ): Promise<void> {
     grade = grade.trim();
