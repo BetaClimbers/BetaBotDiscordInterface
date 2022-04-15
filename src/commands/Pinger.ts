@@ -17,6 +17,17 @@ const triggers: Array<{ match: string | RegExp; reply: string }> = [
     reply:
       "`terminal velocity` detected, you probably want to talk to <@178030175500500992>",
   },
+  {
+    match: "stacked cams",
+    // WideCamSam
+    reply:
+      "`stacked cams` detected, you probably want to talk to <@689306616784617498>",
+  },
+  {
+    match: "anchors",
+    // a gear head
+    reply: "`anchors` you say? <@100288611609485312> probably knows the answer",
+  },
 ];
 
 @Discord()
