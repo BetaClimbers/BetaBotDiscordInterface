@@ -1,22 +1,24 @@
 import { CommandInteraction } from "discord.js";
 import { Discord, Slash, SlashChoice, SlashOption } from "discordx";
 import ClimbingGrade, {
+  GradeSystem,
   gradeSystems,
   gradeSystemsList,
 } from "../climbing-grade";
 
-const GradeSystems: {
-  [key: string]: gradeSystemsList;
-} = {
-  French: "french",
-  "Yosemite Decimal System": "yds",
-  Australian: "australian",
-  "South African": "south_african",
-  UIAA: "uiaa",
-  Hueco: "hueco",
-  British: "british",
-  Kurtyka: "kurtyki",
-};
+// const GradeSystemsOptions = [
+//   {
+//     name: "",
+//     value: "",
+//   },
+// ];
+
+const GradeSystemsOptions = Object.entries(gradeSystems).map(
+  ([key, value]: [string, GradeSystem]) => ({
+    name: value.displayName ?? key,
+    value: key,
+  })
+);
 
 @Discord()
 export abstract class Grade {
@@ -24,23 +26,21 @@ export abstract class Grade {
   async grade(
     @SlashOption("grade", {
       description: "The grade to convert",
-      // required: true,
+      required: true,
     })
     grade: string,
-    @SlashChoice(GradeSystems)
+    @SlashChoice(...GradeSystemsOptions)
     @SlashOption("from", {
       description: "The grade system to convert from",
       required: false,
     })
-    from: gradeSystemsList,
-    // from: gradeSystemsList | undefined,
-    @SlashChoice(GradeSystems)
+    from: gradeSystemsList | undefined,
+    @SlashChoice(...GradeSystemsOptions)
     @SlashOption("to", {
       description: "The grade system to convert to",
       required: false,
     })
-    to: gradeSystemsList,
-    // to: gradeSystemsList | undefined,
+    to: gradeSystemsList | undefined,
     interaction: CommandInteraction
   ): Promise<void> {
     grade = grade.trim();

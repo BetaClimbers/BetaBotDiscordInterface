@@ -3,10 +3,11 @@
  * https://github.com/Grantismo/climbing-grade.js/
  */
 
-type GradeSystem = {
+export type GradeSystem = {
   grades: string[];
   format?(unFormatted: string): string;
   regexes?: RegExp[];
+  displayName?: string;
 };
 
 const createGradeSystems = <M extends { [key: string]: GradeSystem }>(
@@ -54,6 +55,7 @@ export const gradeSystems = createGradeSystems({
       /^5\.1[0-5][a-d]$/, // YDS from 5.10-5.15 where we expect letters
       /^5\.1[0-5]$/, //YDS from 5.10-5.15 where we do not expect letters
     ],
+    displayName: "Yosemite Decimal System",
   },
   french: {
     grades: [
@@ -95,6 +97,7 @@ export const gradeSystems = createGradeSystems({
       /^[1-9][abc][+]?$/, // Base french system
       /^[1-9]([abc][+])?$/, // French where we do not expect letters or plus
     ],
+    displayName: "French",
   },
   australian: {
     grades: [
@@ -132,6 +135,7 @@ export const gradeSystems = createGradeSystems({
       "38",
       "39",
     ],
+    displayName: "Australian",
   },
   south_african: {
     grades: [
@@ -169,6 +173,7 @@ export const gradeSystems = createGradeSystems({
       "40",
       "41",
     ],
+    displayName: "South African",
   },
   uiaa: {
     grades: [
@@ -207,6 +212,7 @@ export const gradeSystems = createGradeSystems({
       "xii+",
     ],
     format: (unFormatted) => unFormatted.toUpperCase(),
+    displayName: "UIAA",
   },
   british: {
     grades: [
@@ -248,6 +254,7 @@ export const gradeSystems = createGradeSystems({
       const gradeParts = unFormatted.split(" ");
       return gradeParts[0].toUpperCase() + " " + gradeParts[1];
     },
+    displayName: "British",
   },
   hueco: {
     grades: [
@@ -286,6 +293,7 @@ export const gradeSystems = createGradeSystems({
       "v17",
     ],
     format: (unFormatted) => unFormatted.toUpperCase(),
+    displayName: "Hueco",
   },
   font: {
     grades: [
@@ -364,6 +372,7 @@ export const gradeSystems = createGradeSystems({
       "vi.8",
     ],
     format: (unFormatted) => unFormatted.toUpperCase(),
+    displayName: "Kurtyka",
   },
 });
 // TODO: Better name for `gradeSystemsList`
