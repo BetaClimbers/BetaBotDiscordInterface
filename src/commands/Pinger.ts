@@ -39,11 +39,11 @@ export abstract class Pinger {
 
     for (const trigger of triggers) {
       if (message.content.match(trigger.match)) {
-        await message.reply(trigger.reply);
         // TODO: Maybe log the actual match, not the regex
         console.log(
           `${message.author.username}#${message.author.discriminator} triggered the ${trigger.match} keyword`
         );
+        await message.reply(trigger.reply);
         break;
       }
     }

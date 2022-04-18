@@ -27,7 +27,11 @@ export class Main {
     });
 
     this._client.on("interactionCreate", (interaction) => {
-      this._client.executeInteraction(interaction);
+      try {
+        this._client.executeInteraction(interaction);
+      } catch (e) {
+        console.error("Failed to execute slash command: ", e);
+      }
     });
 
     await importx(__dirname + "/commands/**/*.{js,ts}");
