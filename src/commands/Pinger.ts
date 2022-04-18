@@ -24,7 +24,7 @@ const triggers: Array<{ match: string | RegExp; reply: string }> = [
       "`stacked cams` detected, you probably want to talk to <@689306616784617498>",
   },
   {
-    match: "anchors",
+    match: /anchors?/,
     // a gear head
     reply: "`anchors` you say? <@100288611609485312> probably knows the answer",
   },
@@ -35,10 +35,11 @@ export abstract class Pinger {
   @On("messageCreate")
   async onMessage([message]: ArgsOf<"messageCreate">): Promise<void> {
     if (message.author.bot) return;
-    // console.log(message.author, message.content);
+
+    const lowerCaseContent = message.content.toLowerCase();
 
     for (const trigger of triggers) {
-      if (message.content.match(trigger.match)) {
+      if (lowerCaseContent.match(trigger.match)) {
         // TODO: Maybe log the actual match, not the regex
         console.log(
           `${message.author.username}#${message.author.discriminator} triggered the ${trigger.match} keyword`
