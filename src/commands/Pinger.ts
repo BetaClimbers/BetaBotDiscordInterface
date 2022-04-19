@@ -24,9 +24,16 @@ const triggers: Array<{ match: string | RegExp; reply: string }> = [
       "`stacked cams` detected, you probably want to talk to <@689306616784617498>",
   },
   {
-    match: /anchors?/,
+    match: /(?<!\w)anchors?(?!\w)/,
+    // Match free standing anchor(s), so no anchorage, but do match at beginning or end of message
     // a gear head
     reply: "`anchors` you say? <@100288611609485312> probably knows the answer",
+  },
+  {
+    match: /(((i|(\w'))s)|are) aid(?!\w)/,
+    // 's aid, is aid, are aid
+    // Wait, it's all aid? Always has been
+    reply: "https://i.imgflip.com/6d34yy.jpg",
   },
 ];
 
