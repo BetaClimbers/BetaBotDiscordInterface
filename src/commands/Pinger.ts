@@ -1,15 +1,16 @@
 import { ArgsOf, Discord, On } from "discordx";
 
-const triggers: Array<{ match: string | RegExp; reply: string }> = [
+const triggers: Array<{
+  match: string | RegExp;
+  reply: string;
+  timeout?: number;
+  ignoreFrom?: string[];
+}> = [
   {
     match: "dummy",
     // BetaClimber
     reply: "`dummy` detected, you probably mean <@445032542052155392>",
-  },
-  {
-    match: "smart person",
-    // Jetse
-    reply: "`smart person` detected, you probably mean <@384348624492167168>",
+    timeout: 10 * 60 * 1000, // 10 minutes
   },
   {
     match: "terminal velocity",
@@ -28,6 +29,8 @@ const triggers: Array<{ match: string | RegExp; reply: string }> = [
     // Match free standing anchor(s), so no anchorage, but do match at beginning or end of message
     // a gear head
     reply: "`anchors` you say? <@100288611609485312> probably knows the answer",
+    timeout: 10 * 60 * 1000, // 10 minutes
+    ignoreFrom: ["100288611609485312"],
   },
   {
     match: /(((i|(\w'))s)|are) aid(?!\w)/,
@@ -37,6 +40,8 @@ const triggers: Array<{ match: string | RegExp; reply: string }> = [
   },
 ];
 
+const lastMessage: { [key: number]: { [key: string]: number } } = {};
+
 @Discord()
 export abstract class Pinger {
   @On("messageCreate")
@@ -45,12 +50,40 @@ export abstract class Pinger {
 
     const lowerCaseContent = message.content.toLowerCase();
 
-    for (const trigger of triggers) {
+    for (const [i, trigger] of triggers.entries()) {
       if (lowerCaseContent.match(trigger.match)) {
         // TODO: Maybe log the actual match, not the regex
         console.log(
           `${message.author.username}#${message.author.discriminator} triggered the ${trigger.match} keyword`
         );
+
+        if ((trigger.ignoreFrom ?? []).includes(message.author.id)) {
+          console.log("Aborting, author is on ignore list");
+          break;
+        }
+
+        const guildId = message.guildId;
+        if (guildId === null) {
+          console.log("Aborting, guildId is null");
+          break;
+        }
+
+        const time = new Date().getMilliseconds();
+
+        // If this trigger didn't yet create a timeout entry, set it
+        // If this guild (server) didn't yet create a timeout, set it
+        // If the last reply was more than `timeout` milliseconds ago, set it to the current time
+        if (lastMessage[i] === undefined) lastMessage[i] = { [guildId]: time };
+        else if (
+          lastMessage[i][guildId] === undefined ||
+          time - lastMessage[i][guildId] > (trigger.timeout ?? 0)
+        ) {
+          lastMessage[i][guildId] = time;
+        } else {
+          console.log("Didn't send reply because of timeout");
+          break;
+        }
+
         await message.reply(trigger.reply);
         break;
       }
