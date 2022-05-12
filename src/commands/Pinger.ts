@@ -7,7 +7,7 @@ const triggers: Array<{
   ignoreFrom?: string[];
 }> = [
   {
-    match: "dummy",
+    match: /dumm(y|ie)/,
     // BetaClimber
     reply: "`dummy` detected, you probably mean <@445032542052155392>",
     timeout: 10 * 60 * 1000, // 10 minutes
