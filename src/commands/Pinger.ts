@@ -68,7 +68,7 @@ export abstract class Pinger {
           break;
         }
 
-        const time = new Date().getMilliseconds();
+        const time = new Date().getTime();
 
         // If this trigger didn't yet create a timeout entry, set it
         // If this guild (server) didn't yet create a timeout, set it
