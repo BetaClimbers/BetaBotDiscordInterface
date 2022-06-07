@@ -10,26 +10,28 @@ const triggers: Array<{
     match: /dumm(y|ie)/,
     // BetaClimber
     reply: "`dummy` detected, you probably mean <@445032542052155392>",
-    timeout: 10 * 60 * 1000, // 10 minutes
+    timeout: 30 * 60 * 1000, // 30 minutes
   },
   {
     match: "terminal velocity",
     // Matlab
     reply:
       "`terminal velocity` detected, you probably want to talk to <@178030175500500992>",
+    timeout: 60 * 60 * 1000, // 60 minutes
   },
   {
     match: "stacked cams",
     // WideCamSam
     reply:
       "`stacked cams` detected, you probably want to talk to <@689306616784617498>",
+    timeout: 60 * 60 * 1000, // 60 minutes
   },
   {
     match: /(?<!\w)anchors?(?!\w)/,
     // Match free standing anchor(s), so no anchorage, but do match at beginning or end of message
     // a gear head
     reply: "`anchors` you say? <@100288611609485312> probably knows the answer",
-    timeout: 10 * 60 * 1000, // 10 minutes
+    timeout: 60 * 60 * 1000, // 60 minutes
     ignoreFrom: ["100288611609485312"],
   },
   {
@@ -37,6 +39,7 @@ const triggers: Array<{
     // 's aid, is aid, are aid
     // Wait, it's all aid? Always has been
     reply: "https://i.imgflip.com/6d34yy.jpg",
+    timeout: 60 * 60 * 1000, // 60 minutes
   },
 ];
 
