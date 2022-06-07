@@ -1,4 +1,5 @@
 import { ArgsOf, Discord, On } from "discordx";
+import { MessagePayload } from "discord.js";
 
 const triggers: Array<{
   match: string | RegExp;
@@ -87,7 +88,12 @@ export abstract class Pinger {
           break;
         }
 
-        await message.reply(trigger.reply);
+        await message.reply(
+          new MessagePayload(message, {
+            content: trigger.reply,
+            allowedMentions: { repliedUser: false },
+          })
+        );
         break;
       }
     }
