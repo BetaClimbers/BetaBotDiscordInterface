@@ -94,8 +94,7 @@ export const gradeSystems = createGradeSystems({
       "9c",
     ],
     regexes: [
-      /^[1-9][abc][+]?$/, // Base french system
-      /^[1-9]([abc][+])?$/, // French where we do not expect letters or plus
+      /^(([2-4])|([5-9][abcABC]))([+]?)?$/,
     ],
     displayName: "French",
   },
