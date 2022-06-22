@@ -91,7 +91,6 @@ export abstract class Pinger {
         await message.reply(
           new MessagePayload(message, {
             content: trigger.reply,
-            allowedMentions: { repliedUser: false },
           })
         );
         break;
