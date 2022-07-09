@@ -5,13 +5,14 @@ const triggers: Array<{
   match: string | RegExp;
   reply: string;
   timeout?: number;
+  globalTimeout?: boolean;
   ignoreFrom?: string[];
 }> = [
   {
     match: /dumm(y|ie)/,
     // BetaClimber
     reply: "`dummy` detected, you probably mean <@445032542052155392>",
-    timeout: 30 * 60 * 1000, // 30 minutes
+    timeout: 60 * 60 * 1000, // 60 minutes
   },
   {
     match: "terminal velocity",
@@ -32,7 +33,8 @@ const triggers: Array<{
     // Match free standing anchor(s), so no anchorage, but do match at beginning or end of message
     // a gear head
     reply: "`anchors` you say? <@100288611609485312> probably knows the answer",
-    timeout: 60 * 60 * 1000, // 60 minutes
+    timeout: 12 * 60 * 60 * 1000, // 12 hours
+    globalTimeout: true,
     ignoreFrom: ["100288611609485312"],
   },
   {
@@ -40,7 +42,7 @@ const triggers: Array<{
     // 's aid, is aid, are aid
     // Wait, it's all aid? Always has been
     reply: "https://i.imgflip.com/6d34yy.jpg",
-    timeout: 60 * 60 * 1000, // 60 minutes
+    timeout: 8 * 60 * 60 * 1000, // 8 hours
   },
 ];
 
@@ -66,7 +68,7 @@ export abstract class Pinger {
           break;
         }
 
-        const guildId = message.guildId;
+        const guildId = trigger.globalTimeout ? 0 : message.guildId;
         if (guildId === null) {
           console.log("Aborting, guildId is null");
           break;
