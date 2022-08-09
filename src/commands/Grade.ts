@@ -1,4 +1,4 @@
-import { CommandInteraction } from "discord.js";
+import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
 import { Discord, Slash, SlashChoice, SlashOption } from "discordx";
 import ClimbingGrade, {
   GradeSystem,
@@ -33,12 +33,14 @@ export abstract class Grade {
     @SlashOption("from", {
       description: "The grade system to convert from",
       required: false,
+      type: ApplicationCommandOptionType.String,
     })
     from: gradeSystemsList | undefined,
     @SlashChoice(...GradeSystemsOptions)
     @SlashOption("to", {
       description: "The grade system to convert to",
       required: false,
+      type: ApplicationCommandOptionType.String,
     })
     to: gradeSystemsList | undefined,
     interaction: CommandInteraction

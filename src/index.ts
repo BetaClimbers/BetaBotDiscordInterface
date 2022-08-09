@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { Client } from "discordx";
 import dotenv from "dotenv";
-import { Intents } from "discord.js";
+import { IntentsBitField } from "discord.js";
 import { importx } from "@discordx/importer";
 
 dotenv.config();
@@ -15,7 +15,10 @@ export class Main {
 
   static async start(token: string): Promise<void> {
     this._client = new Client({
-      intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+      intents: [
+        IntentsBitField.Flags.Guilds,
+        IntentsBitField.Flags.GuildMessages,
+      ],
       botGuilds:
         process.env.NODE_ENV == "development"
           ? ["874599601078935612"]
@@ -23,6 +26,10 @@ export class Main {
     });
 
     this._client.once("ready", async () => {
+      if (process.env.NODE_ENV == "development") {
+        await this._client.guilds.fetch();
+        await this._client.initApplicationCommands();
+      }
       console.log("Bot started");
     });
 
