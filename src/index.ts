@@ -26,10 +26,8 @@ export class Main {
     });
 
     this._client.once("ready", async () => {
-      if (process.env.NODE_ENV == "development") {
-        await this._client.guilds.fetch();
-        await this._client.initApplicationCommands();
-      }
+      await this._client.guilds.fetch();
+      await this._client.initApplicationCommands();
       console.log("Bot started");
     });
 
