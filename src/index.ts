@@ -18,6 +18,7 @@ export class Main {
       intents: [
         IntentsBitField.Flags.Guilds,
         IntentsBitField.Flags.GuildMessages,
+        IntentsBitField.Flags.MessageContent,
       ],
       botGuilds:
         process.env.NODE_ENV == "development"
