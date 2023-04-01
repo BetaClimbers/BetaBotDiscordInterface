@@ -9,15 +9,21 @@ enum TempUnit {
 
 @Discord()
 export abstract class Temp {
-  @Slash("temp")
+  @Slash({
+    name: "temp",
+    description: "Convert temperatures between normal and freedom units",
+  })
   async temp(
-    @SlashOption("temperature", {
+    @SlashOption({
+      name: "temperature",
       description: "The temperature to convert",
       required: true,
+      type: ApplicationCommandOptionType.String,
     })
     temperature: string,
     @SlashChoice(...Object.keys(TempUnit).filter((key) => isNaN(parseInt(key))))
-    @SlashOption("from", {
+    @SlashOption({
+      name: "from",
       description: "The unit to convert from",
       required: false,
       type: ApplicationCommandOptionType.String,

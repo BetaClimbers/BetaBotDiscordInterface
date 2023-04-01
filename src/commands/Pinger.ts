@@ -50,7 +50,9 @@ const lastMessage: { [key: number]: { [key: string]: number } } = {};
 
 @Discord()
 export abstract class Pinger {
-  @On("messageCreate")
+  @On({
+    event: "messageCreate",
+  })
   async onMessage([message]: ArgsOf<"messageCreate">): Promise<void> {
     if (message.author.bot) return;
 

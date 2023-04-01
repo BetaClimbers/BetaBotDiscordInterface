@@ -3,7 +3,10 @@ import { Discord, Slash } from "discordx";
 
 @Discord()
 export abstract class Credits {
-  @Slash("credits")
+  @Slash({
+    name: "credits",
+    description: "Show who built this kick-ass bot",
+  })
   async credits(interaction: CommandInteraction): Promise<void> {
     console.log(
       `${interaction.user.username}#${interaction.user.discriminator} triggered the credits`

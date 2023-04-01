@@ -22,22 +22,29 @@ const GradeSystemsOptions = Object.entries(gradeSystems).map(
 
 @Discord()
 export abstract class Grade {
-  @Slash("grade")
+  @Slash({
+    name: "grade",
+    description: "Convert grades to and from different systems",
+  })
   async grade(
-    @SlashOption("grade", {
+    @SlashOption({
+      name: "grade",
       description: "The grade to convert",
       required: true,
+      type: ApplicationCommandOptionType.String,
     })
     grade: string,
     @SlashChoice(...GradeSystemsOptions)
-    @SlashOption("from", {
+    @SlashOption({
+      name: "from",
       description: "The grade system to convert from",
       required: false,
       type: ApplicationCommandOptionType.String,
     })
     from: gradeSystemsList | undefined,
     @SlashChoice(...GradeSystemsOptions)
-    @SlashOption("to", {
+    @SlashOption({
+      name: "to",
       description: "The grade system to convert to",
       required: false,
       type: ApplicationCommandOptionType.String,
