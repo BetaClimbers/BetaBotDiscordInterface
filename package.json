@@ -34,10 +34,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "@discordx/importer": "^1.2.1",
-    "discord.js": "^14.8.0",
-    "discordx": "^11.7.4",
-    "dotenv": "^16.0.3",
+    "@discordx/importer": "^1.2.2",
+    "discord.js": "^14.11.0",
+    "discordx": "^11.7.6",
+    "dotenv": "^16.3.1",
     "reflect-metadata": "^0.1.13"
   }
 }
